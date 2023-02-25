@@ -14,16 +14,26 @@ const app = new Hono()
 // 	return c.json({hoge: 'fuga'})
 // })
 
-app.get('/api/cache', (c) => {
+app.get('/api/cache', async (c) => {
 
-	return fetch('http://localhost:3000/api/cache', {
+	const cache = caches.default
+
+	const cacheRes = await cache.match('http://localhost:3000/api/cache')
+	if (cacheRes) {
+		return cacheRes
+	}
+
+	let res = await fetch('http://localhost:3000/api/cache', {
 		headers: c.req.headers,
 		body: c.req.body, 
 		cf: {
 			cacheTtl: 30,
-			cacheKey: '',
 		}
 	})
+
+	cache.put('http://localhost:3000/api/cache', res)
+
+	return res
 
 })
 

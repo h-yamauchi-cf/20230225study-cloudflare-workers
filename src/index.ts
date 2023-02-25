@@ -56,6 +56,8 @@ app.get('/example', async () => {
 
 app.get('/async', async (c) => {
 
+	c.executionCtx.passThroughOnException()
+
 	const handler: Promise<void> = new Promise(() => fetch('http://localhost:3000/api/hoge'))
 
 	c.executionCtx.waitUntil(handler)

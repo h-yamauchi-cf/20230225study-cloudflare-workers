@@ -14,8 +14,12 @@ const app = new Hono()
 // 	return c.json({hoge: 'fuga'})
 // })
 
+app.get('/example', () => {
+	return fetch('https://example.com')
+})
+
 app.get('/ab/page', async (c) => {
-	console.log(c.req.url)
+		console.log(c.req.url)
 	const url = new URL(c.req.url)
 	url.port = '3000'	// 8787 で受けたのを 3000 にリダイレクトする
 

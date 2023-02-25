@@ -54,6 +54,17 @@ app.get('/example', async () => {
 
 })
 
+app.get('/async', async (c) => {
+
+	const handler: Promise<void> = new Promise(() => fetch('http://localhost:3000/api/hoge'))
+
+	c.executionCtx.waitUntil(handler)
+
+	// await fetch('http://localhost:3000/api/hoge')
+
+	return c.text('OK!')
+})
+
 app.get('/ab/page', async (c) => {
 		console.log(c.req.url)
 	const url = new URL(c.req.url)

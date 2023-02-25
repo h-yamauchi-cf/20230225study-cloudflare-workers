@@ -95,4 +95,15 @@ app.all('*', (c) => {
 	return fetch(url, { headers: c.req.headers, body: c.req.body })
 })
 
-export default app
+// export default app
+
+export default {
+	fetch: async (
+		req: Request,
+		_env: any,
+		ctx: ExecutionContext
+	) => {
+		ctx.passThroughOnException()
+		return app.fetch(req)
+	}
+}

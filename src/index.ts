@@ -31,7 +31,10 @@ app.get('/api/cache', async (c) => {
 		}
 	})
 
-	cache.put('http://localhost:3000/api/cache', res)
+	res = res.clone()
+	res.headers.set('Cache-Control', 'max-age=30')
+
+	cache.put('http://localhost:3000/api/cache', res.clone())
 
 	return res
 

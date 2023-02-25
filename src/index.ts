@@ -27,11 +27,9 @@ app.get('/ab/page', async (c) => {
 	}
 
 	// const raw = c.req.raw
-	const res0 = await fetch(url, { headers: c.req.headers, body: c.req.body })
-
-	let res = res0.clone()
+	let res = await fetch(url, { headers: c.req.headers, body: c.req.body })
+	res = res.clone()
 	res.headers.set('Set-Cookie', `ab=${url.pathname}`)
-
 	return res
 })
 

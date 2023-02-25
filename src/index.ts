@@ -18,12 +18,18 @@ app.get('/ab/page', async (c) => {
 	console.log(c.req.url)
 	const url = new URL(c.req.url)
 	url.port = '3000'	// 8787 で受けたのを 3000 にリダイレクトする
-	url.pathname = Math.random() < 0.5 ? '/ab/page-a' : '/ab/page-b'
+
+	const abPath = c.req.cookie('ab')
+	if (abPath) {
+		url.pathname = abPath
+	} else {
+		url.pathname = Math.random() < 0.5 ? '/ab/page-a' : '/ab/page-b'
+	}
 
 	// const raw = c.req.raw
 	const res0 = await fetch(url, { headers: c.req.headers, body: c.req.body })
 
-	const res = res0.clone()
+	let res = res0.clone()
 	res.headers.set('Set-Cookie', `ab=${url.pathname}`)
 
 	return res

@@ -41,8 +41,17 @@ app.get('/api/cache', async (c) => {
 })
 
 
-app.get('/example', () => {
-	return fetch('https://example.com')
+app.get('/example', async () => {
+
+	const rewriter = new HTMLRewriter()
+	rewriter.on('h1', { element: (element) => { element.setInnerContent('Test') } })
+
+	let res = await fetch('https://example.com')
+
+	// res.headers.set('Cache-Control', 's-maxage=30')
+
+	return rewriter.transform(res)
+
 })
 
 app.get('/ab/page', async (c) => {
